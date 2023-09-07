@@ -1,5 +1,10 @@
+DROP TABLE ecomm.product;
+DROP TABLE ecomm.role;
+DROP TABLE ecomm.user;
+DROP TABLE ecomm.user_role;
+
 CREATE TABLE ecomm.user (
-    id SERIAL PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT UNIQUE,
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
     updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
     user_name VARCHAR(255) NOT NULL, 
@@ -34,7 +39,7 @@ VALUES
 
 
 CREATE TABLE ecomm.product (
-    id SERIAL PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT UNIQUE,
     price DECIMAL(10, 2) NOT NULL,
     description VARCHAR(255) NOT NULL,
     name VARCHAR(255) NOT NULL,
@@ -106,6 +111,25 @@ VALUES
     (6.99, 'Set of 6 stainless steel teaspoons', 'Teaspoons (Set of 6)', 'Kitchenware'),
     (179.99, 'Compact digital camera with 20MP sensor', 'Digital Camera', 'Electronics');
 
+CREATE TABLE ecomm.role(
+id INT PRIMARY KEY AUTO_INCREMENT UNIQUE,
+name VARCHAR(255) NOT NULL,
+description VARCHAR(255) NOT NULL
+);
+
+
+CREATE TABLE ecomm.user_role (
+id INT PRIMARY KEY NOT NULL UNIQUE,
+name VARCHAR(255) NOT NULL,
+user_id  INT NOT NULL,
+role_id INT NOT NULL,
+constraint role_id_fk foreign key (role_id) references role(id),
+constraint user_id_fk foreign key (user_id) references user(id)
+);
+
 commit;
     
 select * from ecomm.user;
+select * from ecomm.product;
+select * from ecomm.role;
+select * from ecomm.user_role;
