@@ -1,5 +1,6 @@
 package com.ecomm.Controller;
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,11 @@ public class UserController {
     @DeleteMapping("/delete/{id}")
     public void deleteUser(@PathVariable("id") Integer id){
         
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Boolean> loginUser(@RequestBody Map<String,String> loginRequest){
+        return null;
     }
 
     @GetMapping("/{id}")

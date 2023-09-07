@@ -13,5 +13,7 @@ public interface UserRepository extends JpaRepository<User,Integer> {
     
     public ArrayList<User> findAll();
 
+    // public User findByUser_nameAndPassword();
+
 
 }

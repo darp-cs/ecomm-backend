@@ -1,7 +1,8 @@
+DROP TABLE ecomm.user_role;
 DROP TABLE ecomm.product;
 DROP TABLE ecomm.role;
 DROP TABLE ecomm.user;
-DROP TABLE ecomm.user_role;
+
 
 CREATE TABLE ecomm.user (
     id INT PRIMARY KEY AUTO_INCREMENT UNIQUE,
@@ -117,15 +118,17 @@ name VARCHAR(255) NOT NULL,
 description VARCHAR(255) NOT NULL
 );
 
+INSERT INTO ecomm.role(name,description) VALUES('General User', 'general user with minimal permissions');
 
 CREATE TABLE ecomm.user_role (
-id INT PRIMARY KEY NOT NULL UNIQUE,
-name VARCHAR(255) NOT NULL,
+id INT PRIMARY KEY NOT NULL AUTO_INCREMENT UNIQUE,
 user_id  INT NOT NULL,
 role_id INT NOT NULL,
 constraint role_id_fk foreign key (role_id) references role(id),
 constraint user_id_fk foreign key (user_id) references user(id)
 );
+
+INSERT INTO ecomm.user_role(user_id,role_id) VALUES(1,1);
 
 commit;
     

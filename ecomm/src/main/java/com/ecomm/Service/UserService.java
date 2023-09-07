@@ -1,6 +1,7 @@
 package com.ecomm.Service;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,9 @@ public class UserService {
         User user = userDao.get(id);
 
         return user;
+    }
+
+    public void attemptLogin(Map<String,String> loginRequest){
     }
     
 }
