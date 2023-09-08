@@ -16,8 +16,7 @@ public class UserDao implements Dao<User>{
 
     @Override
     public User get(int id) {
-        User user = userRepository.findById(id).orElse(null);
-        return user;
+        return userRepository.findById(id).orElse(null);   
     }
 
     @Override

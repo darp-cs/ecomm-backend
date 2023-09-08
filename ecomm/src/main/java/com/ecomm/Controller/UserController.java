@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecomm.Model.User;
@@ -34,7 +35,7 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteUser(@PathVariable("id") Integer id){
+    public void deleteUser(@RequestParam("id") Integer id){
         
     }
 
@@ -43,9 +44,9 @@ public class UserController {
         return null;
     }
 
-    @GetMapping("/{id}")
-    public void getUser(@PathVariable("id") Integer id){
-        
+    @GetMapping("/getUser")
+    public ResponseEntity<User> getUser(@RequestParam("id") Integer id){
+        return ResponseEntity.ok(userService.getUser(id));
     }
     
 }
