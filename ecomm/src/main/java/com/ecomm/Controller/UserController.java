@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,12 +22,12 @@ public class UserController {
     @Autowired
     UserService userService = new UserService();
 
-    @PostMapping("/add")
+    @PostMapping("/register")
     public void createUser(@RequestBody User userDTO) {
        userService.createUser(userDTO);
     }
 
-    @GetMapping("/")
+    @GetMapping("/getAllUsers")
     public ResponseEntity<ArrayList<User>> getAllUsers() {
         ArrayList<User> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
@@ -39,10 +38,10 @@ public class UserController {
         
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<Boolean> loginUser(@RequestBody Map<String,String> loginRequest){
-        return null;
-    }
+    // @PostMapping("/login")
+    // public ResponseEntity<Boolean> loginUser(@RequestBody Map<String,String> loginRequest){
+        
+    // }
 
     @GetMapping("/getUser")
     public ResponseEntity<User> getUser(@RequestParam("id") Integer id){
