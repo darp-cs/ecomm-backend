@@ -38,11 +38,6 @@ public class UserController {
         
     }
 
-    // @PostMapping("/login")
-    // public ResponseEntity<Boolean> loginUser(@RequestBody Map<String,String> loginRequest){
-        
-    // }
-
     @GetMapping("/getUser")
     public ResponseEntity<User> getUser(@RequestParam("id") Integer id){
         return ResponseEntity.ok(userService.getUser(id));

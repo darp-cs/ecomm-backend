@@ -10,15 +10,18 @@ import org.springframework.stereotype.Repository;
 import com.ecomm.Model.User;
 
 
+
 @Repository
 public interface UserRepository extends JpaRepository<User,Integer> {
     
     public ArrayList<User> findAll();
 
-    @Query(value = "SELECT u FROM User u Where u.user_name = 1", nativeQuery = true)
-    public Optional<User> findByUser_name(String username);
+    public Optional<User> findByUsername(String username);
 
-    // public User findByUser_nameAndPassword();
+    @Query(value = "SELECT * FROM user WHERE username =?1 OR email =?1", nativeQuery = true)
+    public Optional<User> findByUsernameOrEmail(String username);
+    // @Query(value = "SELECT * FROM user WHERE username =?1", nativeQuery = true)
+    // public Optional<User> findByUsername(String username);
 
 
 }

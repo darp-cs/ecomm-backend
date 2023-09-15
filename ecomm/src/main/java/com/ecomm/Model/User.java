@@ -33,7 +33,7 @@ public class User {
     private Timestamp updated_date;
 
     @Column
-    private String user_name;
+    private String username;
 
     @Column
     private String email;
@@ -78,12 +78,12 @@ public class User {
         this.updated_date = updated_date;
     }
 
-    public String getUser_name() {
-        return user_name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {

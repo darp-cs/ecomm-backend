@@ -16,10 +16,10 @@ public class UserAuthDetails implements UserDetails{
 	private List<GrantedAuthority> authorities;
 
 	public UserAuthDetails(User user) {
-		userName = user.getUser_name();
-		password = user.getPassword();
+		this.userName = user.getUsername();
+		this.password = user.getPassword();
         ArrayList<String> roles = (ArrayList<String>) user.getRoles().stream().map(Role::getName).collect(Collectors.toList());
-		authorities = roles.stream()
+		this.authorities = roles.stream()
 				.map(SimpleGrantedAuthority::new)
 				.collect(Collectors.toList());
 	}

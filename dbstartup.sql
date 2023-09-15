@@ -8,14 +8,14 @@ CREATE TABLE ecomm.user (
     id INT PRIMARY KEY AUTO_INCREMENT UNIQUE,
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
     updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
-    user_name VARCHAR(255) NOT NULL, 
+    username VARCHAR(255) NOT NULL, 
     email VARCHAR(255) NOT NULL, 
     first_name VARCHAR(255) NOT NULL, 
     last_name VARCHAR(255) NOT NULL, 
     password VARCHAR(255) NOT NULL 
 );
 
-INSERT INTO ecomm.user (user_name, email, first_name, last_name, password)
+INSERT INTO ecomm.user (username, email, first_name, last_name, password)
 VALUES
     ('lsmith', 'lindasmith@example.com', 'Linda', 'Smith', 'P@ssw0rd!123'),
     ('bwilliams', 'brian.williams@example.com', 'Brian', 'Williams', 'W!ll!am$P@ss'),
@@ -36,7 +36,8 @@ VALUES
     ('gbrown', 'george.brown@example.com', 'George', 'Brown', 'G30rg3#Br0wn$P@ss!'),
     ('kstewart', 'karen.stewart@example.com', 'Karen', 'Stewart', 'K@r3n#St3w@rt$P@ss!'),
     ('ajohnson', 'anthony.johnson@example.com', 'Anthony', 'Johnson', '4nth0ny#J0hn$on$P@ss!'),
-    ('cwilliams', 'carolyn.williams@example.com', 'Carolyn', 'Williams', 'C@r0lyn#W!ll!@m$P@ss!');
+    ('cwilliams', 'carolyn.williams@example.com', 'Carolyn', 'Williams', 'C@r0lyn#W!ll!@m$P@ss!'),
+    ('diego1', 'diego1@example.com', 'diego', 'rodriguez', 'password');
 
 
 CREATE TABLE ecomm.product (
@@ -128,7 +129,7 @@ constraint user_id_fk foreign key (user_id) references user(id),
 primary key(user_id,role_id)
 );
 
-INSERT INTO ecomm.user_role(user_id,role_id) VALUES(1,1);
+INSERT INTO ecomm.user_role(user_id,role_id) VALUES(21,1);
 
 commit;
     

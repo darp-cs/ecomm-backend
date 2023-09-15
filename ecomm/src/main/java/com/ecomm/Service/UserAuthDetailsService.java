@@ -17,10 +17,13 @@ public class UserAuthDetailsService implements UserDetailsService{
 	private UserRepository userRepository;
 
     @Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Optional<User> userInfo = userRepository.findByUser_name(username);
-		return userInfo.map(UserAuthDetails::new)
-				.orElseThrow(() -> new UsernameNotFoundException("user not found " + username));
+	public UserDetails loadUserByUsername(String credential) throws UsernameNotFoundException {
+		Optional<User> userInfo = userRepository.findByUsernameOrEmail(credential);
+
+		UserDetails userDetails = userInfo.map(UserAuthDetails::new)
+				.orElseThrow(() -> new UsernameNotFoundException("user not found " + credential));
+
+		return  userDetails;
 
 	}
     
