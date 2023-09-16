@@ -20,7 +20,7 @@ import com.ecomm.Model.User;
 import com.ecomm.Security.JwtUtil;
 
 @RestController
-@RequestMapping("/Auth")
+@RequestMapping("/auth")
 public class AuthController {
 
     @Autowired
