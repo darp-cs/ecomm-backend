@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -42,30 +39,21 @@ public class SecurityConfiguration{
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http,NoOpPasswordEncoder noOpPasswordEncoder)
+    public AuthenticationManager authenticationManager(HttpSecurity http,PasswordEncoder noOpPasswordEncoder)
             throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.userDetailsService(userAuthDetailsService).passwordEncoder(noOpPasswordEncoder);
         return authenticationManagerBuilder.build();
     }
 
-    // @Bean
-    // SecurityFilterChain configure(HttpSecurity http) throws Exception{
-    // //   http.csrf().disable().authorizeRequests().requestMatchers("users/login").anonymous().anyRequest().authenticated().and().httpBasic().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-    //     //   return http.build();
-    //      http.csrf().disable()
-	// 			.authorizeHttpRequests().requestMatchers("/users/register").permitAll()
-	// 			.and()
-	// 			.authorizeHttpRequests().requestMatchers("/users/**").authenticated().and()
-	// 			.httpBasic().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-    //     return http.build();
+
 
      @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf().disable()
                 .authorizeRequests()
-                .requestMatchers("Auth/**").permitAll()
+                .requestMatchers("auth/**").permitAll()
                 .anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().addFilterBefore(jwtAuthorizationFilter,UsernamePasswordAuthenticationFilter.class);
@@ -87,24 +75,17 @@ public class SecurityConfiguration{
         return source;
     }
 
-    // @Bean
-    // PasswordEncoder passwordEncoder(){
-    //     return new BCryptPasswordEncoder();
-    // }
-
-    // @Bean
-    // AuthenticationProvider authenticationProvider(){
-    //     DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-    //     daoAuthenticationProvider.setUserDetailsService(userDetailsService(passwordEncoder()));
-    //     daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-    //     return daoAuthenticationProvider;
-    // }
-
-    @SuppressWarnings("deprecation")
     @Bean
-    public NoOpPasswordEncoder passwordEncoder() {
-        return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
+    PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
     }
+
+
+    // @SuppressWarnings("deprecation")
+    // @Bean
+    // public NoOpPasswordEncoder passwordEncoder() {
+    //     return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
+    // }
 
 
 }
