@@ -17,27 +17,14 @@ CREATE TABLE ecomm.user (
 
 INSERT INTO ecomm.user (username, email, first_name, last_name, password)
 VALUES
-    ('lsmith', 'lindasmith@example.com', 'Linda', 'Smith', 'P@ssw0rd!123'),
-    ('bwilliams', 'brian.williams@example.com', 'Brian', 'Williams', 'W!ll!am$P@ss'),
-    ('kjohnson', 'karen.johnson@example.com', 'Karen', 'Johnson', 'J0hn$onP@ss!'),
-    ('rlee', 'richard.lee@example.com', 'Richard', 'Lee', 'L33R1ch#P@ss'),
-    ('mmartinez', 'maria.martinez@example.com', 'Maria', 'Martinez', 'M@rt!n3zP@ss!'),
-    ('jrodriguez', 'jose.rodriguez@example.com', 'Jose', 'Rodriguez', 'R0dr!gu3zP@ss!'),
-    ('esmith', 'elizabeth.smith@example.com', 'Elizabeth', 'Smith', '3l!z@b3thP@ss!'),
-    ('mjones', 'mark.jones@example.com', 'Mark', 'Jones', 'M@rk#J0n3$P@ss!'),
-    ('jwilliams', 'julie.williams@example.com', 'Julie', 'Williams', 'J3w!ll1@m$P@ss!'),
-    ('rthomas', 'rebecca.thomas@example.com', 'Rebecca', 'Thomas', 'R3b3cC@T#P@ss!'),
-    ('wscott', 'william.scott@example.com', 'William', 'Scott', 'W!ll1@m$P@ss!'),
-    ('pwhite', 'patricia.white@example.com', 'Patricia', 'White', 'P@tr!c1@#P@ss!'),
-    ('mhill', 'michael.hill@example.com', 'Michael', 'Hill', 'M!k3@#H!ll$P@ss!'),
-    ('asanchez', 'angela.sanchez@example.com', 'Angela', 'Sanchez', '4ng3l@#P@ss!'),
-    ('jrogers', 'jeffrey.rogers@example.com', 'Jeffrey', 'Rogers', 'J3ff#R0g3r$P@ss!'),
-    ('swalker', 'shirley.walker@example.com', 'Shirley', 'Walker', '5h!rL3y#P@ss!'),
-    ('gbrown', 'george.brown@example.com', 'George', 'Brown', 'G30rg3#Br0wn$P@ss!'),
-    ('kstewart', 'karen.stewart@example.com', 'Karen', 'Stewart', 'K@r3n#St3w@rt$P@ss!'),
-    ('ajohnson', 'anthony.johnson@example.com', 'Anthony', 'Johnson', '4nth0ny#J0hn$on$P@ss!'),
-    ('cwilliams', 'carolyn.williams@example.com', 'Carolyn', 'Williams', 'C@r0lyn#W!ll!@m$P@ss!'),
-    ('diego1', 'diego1@example.com', 'diego', 'rodriguez', 'password');
+    ('asanchez', 'angela.sanchez@example.com', 'Angela', 'Sanchez', '$2a$10$NDHvJra9yYM9A69W.uCZp.2KFx4ol0Z7SWWdBjK7.8g1EAH9.Wqfy'),-- 4ng3l@#P@ss! 
+    ('jrogers', 'jeffrey.rogers@example.com', 'Jeffrey', 'Rogers', '$2a$10$GBLtCMJbO2Guy8OXBr07MeZgGWD.bKblmURiHyf1Tn44yvFx.Ckr6'), -- J3ff#R0g3r$P@ss!
+    ('swalker', 'shirley.walker@example.com', 'Shirley', 'Walker', '$2a$10$kuRo2lUEpPZAZT1F8p6Wr.tZbjhKJh/pY5vJcq6ZB16gLFu0PiGva'), -- 5h!rL3y#P@ss!
+    ('gbrown', 'george.brown@example.com', 'George', 'Brown', '$2a$10$AEFJ2AS9VRm7yVqKMrVxbeCulMotRBKQ7uZas6U2ZLt03EM2QN.ly'), -- G30rg3#Br0wn$P@ss!
+    ('kstewart', 'karen.stewart@example.com', 'Karen', 'Stewart', '$2a$10$YA1IYzZFkkLYkj4m/m.wguDOnql9Tpt5IHDRYzI.NeaP7QPYRICrK'), -- K@r3n#St3w@rt$P@ss!
+    ('ajohnson', 'anthony.johnson@example.com', 'Anthony', 'Johnson', '$2a$10$5kRKCCo3ACN2jngzVSvTgeZKIhAonNTQRp0jvRSpuD9JYsNFUbUBO'), -- 4nth0ny#J0hn$on$P@ss!
+    ('cwilliams', 'carolyn.williams@example.com', 'Carolyn', 'Williams', '$2a$10$weysyNXkpFHj2zQ28BL9z.910eiQH4X6i1ZbYC8y7ihjq2yWIL0mq'), -- C@r0lyn#W!ll!@m$P@ss!
+    ('diego1', 'diego1@example.com', 'diego', 'rodriguez', '$2a$10$KE53ERrAD6sgeGZUMWXw9OIUCM5oa6vA692a9P3d26nJ/UWrG3F8W'); -- password
 
 
 CREATE TABLE ecomm.product (
@@ -129,7 +116,7 @@ constraint user_id_fk foreign key (user_id) references user(id),
 primary key(user_id,role_id)
 );
 
-INSERT INTO ecomm.user_role(user_id,role_id) VALUES(21,1);
+INSERT INTO ecomm.user_role(user_id,role_id) VALUES(8,1);
 
 commit;
     
