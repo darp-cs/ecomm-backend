@@ -45,7 +45,7 @@ public class AuthController {
     private static Logger logger = LoggerFactory.getLogger(AuthController.class);
     
     /*
-     *  Receives a login request authenticates the credentials provided, if authenticated, 
+     * Receives a login request authenticates the credentials provided, if authenticated, 
      * a bearer token is created otherwise an exception
      * 
      * 

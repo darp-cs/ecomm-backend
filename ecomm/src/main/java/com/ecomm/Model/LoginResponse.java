@@ -12,6 +12,7 @@ public class LoginResponse {
     private String lastName;
     private Set<String> roles;
     
+    //Constructor requiring all default variables to set its own variables
     public LoginResponse(String authToken, String username, String email, String firstName,
             String lastName, Set<String> roles) {
         this.authToken = authToken;
@@ -22,6 +23,8 @@ public class LoginResponse {
         this.roles = roles;
     }
 
+    //Overloading constructor above to instead require only an auth token and user object
+    //Overloading is a way to have several methods with the same name but different variables as parameter
     public LoginResponse(String authToken, User user){
         this.authToken = authToken;
         this.username = user.getUsername();

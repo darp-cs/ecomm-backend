@@ -22,6 +22,11 @@ public class UserService {
     RoleDao roleDao;
 
 
+    /*
+     * Method creates a new user in database if no role given to it will default to general user
+     * 
+     * @param       Expects a User object that directly maps to row that matches database
+     */
     public void createUser(User userDTO){
         if(userDTO.getRoles().isEmpty()){
             userDTO.getRoles().add(roleDao.getRoleByName("General User"));

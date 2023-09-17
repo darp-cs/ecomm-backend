@@ -116,6 +116,15 @@ constraint user_id_fk foreign key (user_id) references user(id),
 primary key(user_id,role_id)
 );
 
+CREATE TABLE ecomm.user_product(
+user_id INT NOT NULL,
+product_id INT NOT NULL,
+status VARCHAR(255) NOT NULL,
+constraint product_cart_id_fk foreign key (product_id) references product(id),
+constraint user_cart_id_fk foreign key (user_id) references user(id),
+primary key(user_id,product_id)
+);
+
 INSERT INTO ecomm.user_role(user_id,role_id) VALUES(8,1);
 
 commit;
