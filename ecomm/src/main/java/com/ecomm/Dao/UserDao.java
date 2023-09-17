@@ -35,5 +35,9 @@ public class UserDao implements Dao<User>{
         userRepository.delete(t);
     }
 
+    public User getUserWithUsernameOrEmail(String credential){
+        return userRepository.findByUsernameOrEmail(credential).orElseThrow();
+    }
+
     
 }
