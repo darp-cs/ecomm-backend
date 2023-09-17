@@ -1,9 +1,7 @@
 package com.ecomm.Controller;
 
 
-import java.util.HashMap;
 
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,31 +21,42 @@ import com.ecomm.Model.LoginRequest;
 import com.ecomm.Model.LoginResponse;
 import com.ecomm.Model.User;
 import com.ecomm.Security.JwtUtil;
-import com.ecomm.Service.UserAuthDetailsService;
 import com.ecomm.Service.UserService;
 
+//Rest controller annotation marks class as a Rest controller that will handle apis
+//Request Mapping requires apis to be preceded with /auth (eg. /auth/login)
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
+    //Autowired tells spring application this variable requires dependency injection
     @Autowired
 	private AuthenticationManager authenticationManager;
 
+    //Autowired tells spring application this variable requires dependency injection
     @Autowired
     private UserService userService;
 
+    //Autowired tells spring application this variable requires dependency injection
     @Autowired
     JwtUtil jwtUtil;
 
-    
+    //Loggers are a form of logging that is useful for logging to an application or in your local debugger
     private static Logger logger = LoggerFactory.getLogger(AuthController.class);
     
-    
+    /*
+     *  Receives a login request authenticates the credentials provided, if authenticated, 
+     * a bearer token is created otherwise an exception
+     * 
+     * 
+     * @param       Expected parameter is a json that maps to a LoginRequest object
+     * @return      Returns either a LoginResponse object or an Exception
+     */
     @ResponseBody
     @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request)  {
+    public ResponseEntity<Object> login(@RequestBody LoginRequest request)  {
 
-        // try {
+        try {
             Authentication authentication =
                     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getCredential(), request.getPassword()));
             User user = userService.getUserWithUsernameOrEmail(request.getCredential());
@@ -55,12 +64,12 @@ public class AuthController {
             LoginResponse response = new LoginResponse(token,user);
             return ResponseEntity.ok(response);
 
-        // }catch (BadCredentialsException e){
-        //     // ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST,"Invalid username or password");
-        //     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error");
-        // }catch (Exception e){
-        //     // ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST, e.getMessage());
-        //     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error");
-        // }
+        }catch (BadCredentialsException e){
+            // ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST,"Invalid username or password");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error");
+        }catch (Exception e){
+            // ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST, e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error");
+        }
     }
 }

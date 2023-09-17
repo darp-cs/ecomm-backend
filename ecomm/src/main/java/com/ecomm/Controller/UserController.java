@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ecomm.Model.User;
 import com.ecomm.Service.UserService;
 
+//Rest controller annotation marks class as a Rest controller that will handle apis
+//Request Mapping requires apis to be preceded with /users (eg. /users/register)
 @RestController
 @RequestMapping("/users")
 public class UserController {
