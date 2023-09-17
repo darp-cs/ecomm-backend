@@ -1,6 +1,9 @@
 package com.ecomm.Controller;
 
 
+import java.util.HashMap;
+
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +19,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ecomm.Model.LoginRequest;
+import com.ecomm.Model.LoginResponse;
 import com.ecomm.Model.User;
 import com.ecomm.Security.JwtUtil;
+import com.ecomm.Service.UserAuthDetailsService;
+import com.ecomm.Service.UserService;
 
 @RestController
 @RequestMapping("/auth")
@@ -25,6 +32,9 @@ public class AuthController {
 
     @Autowired
 	private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     JwtUtil jwtUtil;
@@ -35,21 +45,22 @@ public class AuthController {
     
     @ResponseBody
     @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public ResponseEntity login(@RequestBody User user)  {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request)  {
 
-        try {
+        // try {
             Authentication authentication =
-                    authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-            
+                    authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getCredential(), request.getPassword()));
+            User user = userService.getUserWithUsernameOrEmail(request.getCredential());
             String token = jwtUtil.createToken(user);
-            return ResponseEntity.ok(token);
+            LoginResponse response = new LoginResponse(token,user);
+            return ResponseEntity.ok(response);
 
-        }catch (BadCredentialsException e){
-            // ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST,"Invalid username or password");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error");
-        }catch (Exception e){
-            // ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST, e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error");
-        }
+        // }catch (BadCredentialsException e){
+        //     // ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST,"Invalid username or password");
+        //     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error");
+        // }catch (Exception e){
+        //     // ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST, e.getMessage());
+        //     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error");
+        // }
     }
 }

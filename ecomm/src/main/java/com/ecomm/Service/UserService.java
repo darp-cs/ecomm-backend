@@ -15,12 +15,11 @@ import com.ecomm.Model.User;
 @Service
 public class UserService {
 
-    /** Autowired annotation injects dependencies(Resources required)*/
     @Autowired
-    UserDao userDao = new UserDao();
+    UserDao userDao;
 
     @Autowired 
-    RoleDao roleDao = new RoleDao();
+    RoleDao roleDao;
 
 
     public void createUser(User userDTO){
@@ -39,6 +38,10 @@ public class UserService {
         User user = userDao.get(id);
 
         return user;
+    }
+
+    public User getUserWithUsernameOrEmail(String credential){
+        return userDao.getUserWithUsernameOrEmail(credential);
     }
 
     public void attemptLogin(Map<String,String> loginRequest){
