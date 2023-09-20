@@ -11,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,6 +26,7 @@ import com.ecomm.Service.UserService;
 
 //Rest controller annotation marks class as a Rest controller that will handle apis
 //Request Mapping requires apis to be preceded with /auth (eg. /auth/login)
+@CrossOrigin
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
