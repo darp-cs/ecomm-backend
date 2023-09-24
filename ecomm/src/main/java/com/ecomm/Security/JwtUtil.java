@@ -4,7 +4,7 @@ import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 
-import jakarta.servlet.http.Cookie ;
+import jakarta.servlet.http.Cookie;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,44 +25,57 @@ public class JwtUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
 
-    // @Value("${bezkoder.app.jwtSecret}")
+    @Value("${jwtSecret}")
     private String jwtSecret;
 
-    // @Value("${bezkoder.app.jwtExpirationMs}")
+    @Value("${jwtExpirationMs}")
     private int jwtExpirationMs;
 
-    // @Value("${bezkoder.app.jwtCookieName}")
+    @Value("${jwtCookieName}")
     private String jwtCookie;
-    
-    // @Value("${bezkoder.app.jwtRefreshCookieName}")
+
+    @Value("${jwtRefreshCookieName}")
     private String jwtRefreshCookie;
 
-
     private String secret_key = "mysecretkey";
-    private long accessTokenValidity = 60*60*1000;
-
+    private long accessTokenValidity = 60 * 60 * 1000;
 
     private final String TOKEN_HEADER = "Authorization";
     private final String TOKEN_PREFIX = "Bearer ";
 
     @PostConstruct
-    public void init(){
+    public void init() {
         secret_key = Base64.getEncoder().encodeToString(secret_key.getBytes());
     }
 
     public String createToken(User user) {
         Claims claims = Jwts.claims().setSubject(user.getUsername());
-		claims.put("auth", user.getRoles().toString());
+        claims.put("auth", user.getRoles().toString());
 
-		Date now = new Date();
-		return Jwts.builder().setClaims(claims).setIssuedAt(now)
-				.setExpiration(new Date(now.getTime() + accessTokenValidity))
-				.signWith(SignatureAlgorithm.HS512, secret_key).compact();
+        Date now = new Date();
+        return Jwts.builder().setClaims(claims).setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + accessTokenValidity))
+                .signWith(SignatureAlgorithm.HS512, secret_key).compact();
     }
 
     public ResponseCookie generateJwtCookie(User user) {
-        String jwt = createToken(user);   
+        String jwt = createToken(user);
         return generateCookie(jwtCookie, jwt, "/");
+    }
+    
+
+    public String getJwtRefreshFromCookies(HttpServletRequest request) {
+        return getCookieValueByName(request, jwtRefreshCookie);
+    }
+
+    public ResponseCookie getCleanJwtCookie() {
+        ResponseCookie cookie = ResponseCookie.from(jwtCookie, null).path("/").build();
+        return cookie;
+    }
+
+    public ResponseCookie getCleanJwtRefreshCookie() {
+        ResponseCookie cookie = ResponseCookie.from(jwtRefreshCookie, null).path("/auth/refreshtoken").build();
+        return cookie;
     }
 
     public ResponseCookie generateRefreshJwtCookie(String refreshToken) {
@@ -70,8 +83,8 @@ public class JwtUtil {
     }
 
     public Claims getClaimsFromToken(String token) {
-		return Jwts.parser().setSigningKey(secret_key).parseClaimsJws(token).getBody();
-	}
+        return Jwts.parser().setSigningKey(secret_key).parseClaimsJws(token).getBody();
+    }
 
     public Claims resolveClaims(HttpServletRequest req) {
         try {
@@ -115,18 +128,17 @@ public class JwtUtil {
     }
 
     private ResponseCookie generateCookie(String name, String value, String path) {
-    ResponseCookie cookie = ResponseCookie.from(name, value).path(path).maxAge(24 * 60 * 60).httpOnly(true).build();
-    return cookie;
-  }
-
-   private String getCookieValueByName(HttpServletRequest request, String name) {
-    Cookie cookie = WebUtils.getCookie(request, name);
-    if (cookie != null) {
-      return cookie.getValue();
-    } else {
-      return null;
+        ResponseCookie cookie = ResponseCookie.from(name, value).path(path).maxAge(24 * 60 * 60).httpOnly(true).build();
+        return cookie;
     }
-  }
 
+    private String getCookieValueByName(HttpServletRequest request, String name) {
+        Cookie cookie = WebUtils.getCookie(request, name);
+        if (cookie != null) {
+            return cookie.getValue();
+        } else {
+            return null;
+        }
+    }
 
 }

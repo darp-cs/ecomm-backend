@@ -10,7 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 
-@Entity
+@Entity(name="refreshtoken")
 public class RefreshToken {
     
     @Id

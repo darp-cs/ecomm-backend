@@ -48,7 +48,7 @@ public class RefreshTokenDao implements Dao<RefreshToken>{
         return refreshTokenRepository.save(t);
     }
 
-    public void deleteByUser(User user){
-        refreshTokenRepository.deleteByUser(user);
+    public void deleteByUserId(Integer id){
+        refreshTokenRepository.deleteByUserId(id);
     }
 }

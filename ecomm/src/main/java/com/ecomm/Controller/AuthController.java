@@ -1,7 +1,5 @@
 package com.ecomm.Controller;
 
-
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,58 +37,108 @@ import jakarta.servlet.http.HttpServletRequest;
 @RequestMapping("/auth")
 public class AuthController {
 
-    //Autowired tells spring application this variable requires dependency injection
+    // Autowired tells spring application this variable requires dependency
+    // injection
     @Autowired
-	private AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
 
-    //Autowired tells spring application this variable requires dependency injection
+    // Autowired tells spring application this variable requires dependency
+    // injection
     @Autowired
     private UserService userService;
 
-    //Autowired tells spring application this variable requires dependency injection
+    // Autowired tells spring application this variable requires dependency
+    // injection
     @Autowired
     JwtUtil jwtUtil;
 
     @Autowired
     RefreshTokenService refreshTokenService;
 
-    //Loggers are a form of logging that is useful for logging to an application or in your local debugger
+    // Loggers are a form of logging that is useful for logging to an application or
+    // in your local debugger
     private static Logger logger = LoggerFactory.getLogger(AuthController.class);
-    
+
     /*
-     * Receives a login request authenticates the credentials provided, if authenticated, 
+     * Receives a login request authenticates the credentials provided, if
+     * authenticated,
      * a bearer token is created otherwise an exception
      * 
      * 
-     * @param       Expected parameter is a json that maps to a LoginRequest object
-     * @return      Returns either a LoginResponse object or an Exception
+     * @param Expected parameter is a json that maps to a LoginRequest object
+     * 
+     * @return Returns either a LoginResponse object or an Exception
      */
     @ResponseBody
-    @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public ResponseEntity<?> login(@RequestBody LoginRequest request)  {
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
         try {
-            Authentication authentication =
-                    authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getCredential(), request.getPassword()));
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getCredential(), request.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             User user = userService.getUserWithUsernameOrEmail(request.getCredential());
             ResponseCookie jwtCookie = jwtUtil.generateJwtCookie(user);
             RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
-    
+
             ResponseCookie jwtRefreshCookie = jwtUtil.generateRefreshJwtCookie(refreshToken.getToken());
             String token = jwtUtil.createToken(user);
-            LoginResponse response = new LoginResponse(token,user);
+            LoginResponse response = new LoginResponse(token, user);
             return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-            .header(HttpHeaders.SET_COOKIE, jwtRefreshCookie.toString())
-            .body(response);
+                    .header(HttpHeaders.SET_COOKIE, jwtRefreshCookie.toString())
+                    .body(response);
 
-        }catch (BadCredentialsException e){
-            // ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST,"Invalid username or password");
+        } catch (BadCredentialsException e) {
+            // ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST,"Invalid
+            // username or password");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error");
-        }catch (Exception e){
-            // ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (Exception e) {
+            // ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST,
+            // e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error");
         }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logoutUser() {
+        Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principle.toString() != "anonymousUser") {
+            User user = userService.getUserWithUsernameOrEmail((String)principle);
+            refreshTokenService.deleteByUserId(user.getId());
+        }
+
+        ResponseCookie jwtCookie = jwtUtil.getCleanJwtCookie();
+        ResponseCookie jwtRefreshCookie = jwtUtil.getCleanJwtRefreshCookie();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, jwtRefreshCookie.toString())
+                .body("You've been signed out!");
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshtoken(HttpServletRequest request) throws Exception {
+        String refreshToken = jwtUtil.getJwtRefreshFromCookies(request);
+
+        if ((refreshToken != null) && (refreshToken.length() > 0)) {
+            RefreshToken token = refreshTokenService.findByToken(refreshToken);
+                    // .map(refreshTokenService::verifyExpiration)
+            token = refreshTokenService.verifyExpiration(token);
+                    // .map(RefreshToken::getUser)
+                    // .map(user -> {
+
+            User user = token.getUser();
+            ResponseCookie jwtCookie = jwtUtil.generateJwtCookie(user);
+
+                        return ResponseEntity.ok()
+                                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                                .body("Token is refreshed successfully!");
+                    // })
+                    // .orElseThrow(() -> new TokenRefreshException(refreshToken,
+                    //         "Refresh token is not in database!"));
+        }
+
+        return ResponseEntity.badRequest().body("Refresh Token is empty!");
     }
 
 }

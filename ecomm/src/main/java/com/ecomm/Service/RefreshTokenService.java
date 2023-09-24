@@ -15,7 +15,7 @@ import com.ecomm.Model.RefreshToken;
 public class RefreshTokenService {
 
     //This comes from a property
-    // @Value("${bezkoder.app.jwtRefreshExpirationMs}")
+    @Value("${jwtRefreshExpirationMs}")
     private Long refreshTokenDurationMs;
 
     @Autowired
@@ -40,7 +40,8 @@ public class RefreshTokenService {
   }
 
   public RefreshToken verifyExpiration(RefreshToken token) throws Exception {
-    if (token.getExpirationDate().compareTo(new Timestamp(System.currentTimeMillis())) < 0) {
+    Timestamp ts = new Timestamp(System.currentTimeMillis());
+    if (token.getExpirationDate().after(ts)){
       refreshTokenDao.delete(token);
       //TODO: need to create default exception
       throw new Exception("Token not valid");
@@ -50,8 +51,10 @@ public class RefreshTokenService {
   }
 
   
+
+  
   public void deleteByUserId(Integer userId) {
-    refreshTokenDao.deleteByUser(userDao.get(userId));
+    refreshTokenDao.deleteByUserId(userDao.get(userId).getId());
   }
     
 }
