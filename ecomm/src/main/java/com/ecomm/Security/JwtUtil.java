@@ -3,8 +3,16 @@ package com.ecomm.Security;
 import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
+
+import jakarta.servlet.http.Cookie ;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.WebUtils;
 
 import com.ecomm.Model.User;
 
@@ -14,6 +22,20 @@ import java.util.List;
 
 @Component
 public class JwtUtil {
+
+    private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
+
+    // @Value("${bezkoder.app.jwtSecret}")
+    private String jwtSecret;
+
+    // @Value("${bezkoder.app.jwtExpirationMs}")
+    private int jwtExpirationMs;
+
+    // @Value("${bezkoder.app.jwtCookieName}")
+    private String jwtCookie;
+    
+    // @Value("${bezkoder.app.jwtRefreshCookieName}")
+    private String jwtRefreshCookie;
 
 
     private String secret_key = "mysecretkey";
@@ -36,6 +58,15 @@ public class JwtUtil {
 		return Jwts.builder().setClaims(claims).setIssuedAt(now)
 				.setExpiration(new Date(now.getTime() + accessTokenValidity))
 				.signWith(SignatureAlgorithm.HS512, secret_key).compact();
+    }
+
+    public ResponseCookie generateJwtCookie(User user) {
+        String jwt = createToken(user);   
+        return generateCookie(jwtCookie, jwt, "/");
+    }
+
+    public ResponseCookie generateRefreshJwtCookie(String refreshToken) {
+        return generateCookie(jwtRefreshCookie, refreshToken, "/auth/refreshtoken");
     }
 
     public Claims getClaimsFromToken(String token) {
@@ -82,6 +113,20 @@ public class JwtUtil {
     private List<String> getRoles(Claims claims) {
         return (List<String>) claims.get("roles");
     }
+
+    private ResponseCookie generateCookie(String name, String value, String path) {
+    ResponseCookie cookie = ResponseCookie.from(name, value).path(path).maxAge(24 * 60 * 60).httpOnly(true).build();
+    return cookie;
+  }
+
+   private String getCookieValueByName(HttpServletRequest request, String name) {
+    Cookie cookie = WebUtils.getCookie(request, name);
+    if (cookie != null) {
+      return cookie.getValue();
+    } else {
+      return null;
+    }
+  }
 
 
 }

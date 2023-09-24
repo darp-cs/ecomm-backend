@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import com.ecomm.Dao.RoleDao;
 import com.ecomm.Dao.UserDao;
+import com.ecomm.Exception.AuthenticationException;
 import com.ecomm.Model.User;
 
 
@@ -45,7 +47,7 @@ public class UserService {
         return user;
     }
 
-    public User getUserWithUsernameOrEmail(String credential){
+    public User getUserWithUsernameOrEmail(String credential) throws BadCredentialsException{
         return userDao.getUserWithUsernameOrEmail(credential);
     }
 

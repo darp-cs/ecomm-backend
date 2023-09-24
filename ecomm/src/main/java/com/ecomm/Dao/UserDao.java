@@ -3,8 +3,10 @@ package com.ecomm.Dao;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
 
+import com.ecomm.Exception.AuthenticationException;
 import com.ecomm.Model.User;
 import com.ecomm.Repository.UserRepository;
 
@@ -44,8 +46,12 @@ public class UserDao implements Dao<User>{
      * @param       Expected parameter is either the username or email for a user to search by
      * @return      returns a user object
      */
-    public User getUserWithUsernameOrEmail(String credential){
-        return userRepository.findByUsernameOrEmail(credential).orElseThrow();
+    public User getUserWithUsernameOrEmail(String credential) throws BadCredentialsException{
+        User user = userRepository.findByUsernameOrEmail(credential).orElseThrow();
+        if(user.getUsername()==null){
+            throw new BadCredentialsException("User not found");
+        }
+        return user;
     }
 
     
