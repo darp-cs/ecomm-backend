@@ -22,6 +22,7 @@ public class UserDao implements Dao<User>{
         return userRepository.findById(id).orElse(null);   
     }
 
+
     @Override
     public ArrayList<User> getAll() {
         return userRepository.findAll();
