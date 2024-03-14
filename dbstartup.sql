@@ -1,3 +1,6 @@
+
+DROP TABLE ecomm.cart_item;
+DROP TABLE ecomm.cart;
 DROP TABLE ecomm.user_role;
 DROP TABLE ecomm.product;
 DROP TABLE ecomm.role;
@@ -5,11 +8,11 @@ DROP TABLE ecomm.user;
 
 
 CREATE TABLE ecomm.user (
-    id INT PRIMARY KEY AUTO_INCREMENT UNIQUE,
-    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
-    updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
-    username VARCHAR(255) NOT NULL, 
-    email VARCHAR(255) NOT NULL, 
+    user_id INT PRIMARY KEY AUTO_INCREMENT UNIQUE,
+    created_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+    updated_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+    username VARCHAR(255) NOT NULL UNIQUE, 
+    email VARCHAR(255) NOT NULL UNIQUE, 
     first_name VARCHAR(255) NOT NULL, 
     last_name VARCHAR(255) NOT NULL, 
     password VARCHAR(255) NOT NULL 
@@ -28,12 +31,12 @@ VALUES
 
 
 CREATE TABLE ecomm.product (
-    id INT PRIMARY KEY AUTO_INCREMENT UNIQUE,
+    product_id INT PRIMARY KEY AUTO_INCREMENT UNIQUE,
     price DECIMAL(10, 2) NOT NULL,
     description VARCHAR(255) NOT NULL,
     name VARCHAR(255) NOT NULL,
-    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     category VARCHAR(255) NOT NULL DEFAULT 'None',
     image BLOB
 );
@@ -101,7 +104,7 @@ VALUES
     (179.99, 'Compact digital camera with 20MP sensor', 'Digital Camera', 'Electronics');
 
 CREATE TABLE ecomm.role(
-id INT PRIMARY KEY AUTO_INCREMENT UNIQUE,
+role_id INT PRIMARY KEY AUTO_INCREMENT UNIQUE,
 name VARCHAR(255) NOT NULL,
 description VARCHAR(255) NOT NULL
 );
@@ -111,25 +114,41 @@ INSERT INTO ecomm.role(name,description) VALUES('General User', 'general user wi
 CREATE TABLE ecomm.user_role (
 user_id  INT NOT NULL,
 role_id INT NOT NULL,
-constraint role_id_fk foreign key (role_id) references role(id),
-constraint user_id_fk foreign key (user_id) references user(id),
+constraint role_id_fk foreign key (role_id) references role(role_id),
+constraint user_id_fk foreign key (user_id) references user(user_id),
 primary key(user_id,role_id)
 );
 
-CREATE TABLE ecomm.user_product(
+
+CREATE TABLE ecomm.cart(
+cart_id INT NOT NULL,
 user_id INT NOT NULL,
-product_id INT NOT NULL,
 status VARCHAR(255) NOT NULL,
-constraint product_cart_id_fk foreign key (product_id) references product(id),
-constraint user_cart_id_fk foreign key (user_id) references user(id),
-primary key(user_id,product_id)
+purchase_ts TIMESTAMP(3),
+created_ts TIMESTAMP(3),
+updated_ts TIMESTAMP(3),
+constraint user_cart_id_fk foreign key (user_id) references user(user_id),
+primary key(cart_id)
 );
+
+CREATE TABLE ecomm.cart_item(
+item_id INT NOT NULL,
+product_id INT NOT NULL,
+quantity INT NOT NULL,
+cart_id INT NOT NULL,
+constraint product_cart_id_fk foreign key (product_id) references product(product_id),
+constraint cart_cart_id_fk foreign key (cart_id) references cart(cart_id),
+primary key(item_id,product_id,cart_id)
+);
+
+
 
 INSERT INTO ecomm.user_role(user_id,role_id) VALUES(8,1);
 
 commit;
-    
 select * from ecomm.user;
-select * from ecomm.product;
-select * from ecomm.role;
-select * from ecomm.user_role;
+-- select * from ecomm.product;
+-- select * from ecomm.role;user_roleuser_roleuser_role
+-- select * from ecomm.user_role;
+
+-- select * from ecomm.product; 

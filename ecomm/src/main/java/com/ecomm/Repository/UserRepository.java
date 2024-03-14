@@ -12,7 +12,7 @@ import com.ecomm.Model.User;
 
 
 @Repository
-public interface UserRepository extends JpaRepository<User,Integer> {
+public interface UserRepository extends JpaRepository<User,Long> {
     
     public ArrayList<User> findAll();
 
@@ -34,5 +34,6 @@ public interface UserRepository extends JpaRepository<User,Integer> {
     // @Query(value = "SELECT * FROM user WHERE username =?1", nativeQuery = true)
     // public Optional<User> findByUsername(String username);
 
+    public User findByUserId(Long id);
 
 }

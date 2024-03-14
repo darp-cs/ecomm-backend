@@ -6,9 +6,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ecomm.Dao.RoleDao;
-import com.ecomm.Dao.UserDao;
 import com.ecomm.Model.User;
+import com.ecomm.Repository.RoleRepository;
+import com.ecomm.Repository.UserRepository;
 
 
 /** Marking this as a service for spring application */
@@ -16,11 +16,10 @@ import com.ecomm.Model.User;
 public class UserService {
 
     @Autowired
-    UserDao userDao;
+    UserRepository userRepository;
 
-    @Autowired 
-    RoleDao roleDao;
-
+    @Autowired
+    RoleRepository roleRepository;
 
     /*
      * Method creates a new user in database if no role given to it will default to general user
@@ -29,24 +28,25 @@ public class UserService {
      */
     public void createUser(User userDTO){
         if(userDTO.getRoles().isEmpty()){
-            userDTO.getRoles().add(roleDao.getRoleByName("General User"));
+            userDTO.getRoles().add(roleRepository.findByName("General User"));
+            // roleDao.getRoleByName("General User")
         }
-        userDao.save(userDTO);
+        userRepository.save(userDTO);
     }
 
     public ArrayList<User> getAllUsers(){
-        ArrayList<User> users = userDao.getAll();
+        ArrayList<User> users = userRepository.findAll();
         return users;
     }
 
-    public User getUser(Integer id){
-        User user = userDao.get(id);
+    public User getUser(Long id){
+        User user = userRepository.findByUserId(id);
 
         return user;
     }
 
     public User getUserWithUsernameOrEmail(String credential){
-        return userDao.getUserWithUsernameOrEmail(credential);
+        return userRepository.findByUsernameOrEmail(credential).get();
     }
 
     public void attemptLogin(Map<String,String> loginRequest){

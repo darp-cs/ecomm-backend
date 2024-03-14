@@ -64,6 +64,9 @@ public class SecurityConfiguration{
 
      @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        /*If it has permit all then we dont need bearer token
+         * If it has authenticated then a bearer token is required
+         */
         return http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
@@ -72,6 +75,8 @@ public class SecurityConfiguration{
                         .permitAll()
                         .requestMatchers("users/**")
                         .authenticated()
+                        .requestMatchers("products/**")
+                        .permitAll()
                         )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthorizationFilter,UsernamePasswordAuthenticationFilter.class)
