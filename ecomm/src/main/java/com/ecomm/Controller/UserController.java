@@ -3,7 +3,6 @@ import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,7 +51,7 @@ public class UserController {
      * @param       Expected parameter is the id for user to delete
      */
     @DeleteMapping("/delete/{id}")
-    public void deleteUser(@RequestParam("id") Integer id){
+    public void deleteUser(@RequestParam("id") Long id){
         
     }
 
@@ -63,7 +62,7 @@ public class UserController {
      * @return      Returns user object
      */
     @GetMapping("/getUser")
-    public ResponseEntity<User> getUser(@RequestParam("id") Integer id){
+    public ResponseEntity<User> getUser(@RequestParam("id") Long id){
         return ResponseEntity.ok(userService.getUser(id));
     }
     

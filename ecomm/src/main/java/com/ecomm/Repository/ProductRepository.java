@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Integer>{
+public interface ProductRepository extends JpaRepository<Product, Long>{
     
     public ArrayList<Product> findAll();
 

@@ -1,5 +1,6 @@
 package com.ecomm.Model;
 
+import java.io.Serializable;
 import java.sql.Blob;
 import java.sql.Timestamp;
 
@@ -13,28 +14,40 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class Product {
+//By implementing Serializable we can represent an objects state as a byte stream
+public class Product implements Serializable{
+
+    /*@Id Specifies this is the primary key for this table
+     * @GeneratedValue Specifies that this value will be auto generated if not provided as the next value in line
+     * @Column
+     *        Name is specified because the name in the table uses underscore, we use camel case for the variables as best practice
+     *        This value should also be unique for this column so we specify that as well
+     *        Finally the field should not be null, this is taken care of by generated value but we specify so the developer is aware
+     */
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column(name="product_id",unique = true, nullable = false)
+    private Long productId;
 
-    @Column
+    @Column(nullable = false)
     private Double price;
 
-    @Column
+    @Column(nullable = false)
     private String description;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
+    // @CreationTimestamp makes sure to persist(sets the value to) the current timestamp when a new object is being created
     @CreationTimestamp
-    @Column
-    private Timestamp created_date;
+    @Column(name = "created_ts")
+    private Timestamp createdTS;
 
+    // @UpdateTimestamp makes sure to persist(sets the value to) the current timestamp when an object is being updated
     @UpdateTimestamp
-    @Column
-    private Timestamp updated_date;
+    @Column(name = "updated_ts")
+    private Timestamp updatedTS;
 
     @Column
     private String category;
@@ -42,12 +55,12 @@ public class Product {
     @Column
     private Blob image;
 
-    public Integer getId() {
-        return id;
+    public Long getProductId() {
+        return productId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 
     public Double getPrice() {
@@ -74,20 +87,20 @@ public class Product {
         this.name = name;
     }
 
-    public Timestamp getCreated_date() {
-        return created_date;
+    public Timestamp getCreatedTS() {
+        return createdTS;
     }
 
-    public void setCreated_date(Timestamp created_date) {
-        this.created_date = created_date;
+    public void setCreatedTS(Timestamp createdTS) {
+        this.createdTS = createdTS;
     }
 
-    public Timestamp getUpdated_date() {
-        return updated_date;
+    public Timestamp getUpdatedTS() {
+        return updatedTS;
     }
 
-    public void setUpdated_date(Timestamp updated_date) {
-        this.updated_date = updated_date;
+    public void setUpdatedTS(Timestamp updatedTS) {
+        this.updatedTS = updatedTS;
     }
 
     public String getCategory() {
@@ -106,55 +119,7 @@ public class Product {
         this.image = image;
     }
 
-    @Override
-    public String toString() {
-        return "Product [id=" + id + ", price=" + price + ", description=" + description + ", name=" + name
-                + ", created_date=" + created_date + ", updated_date=" + updated_date + ", category=" + category
-                + ", image=" + image + "]";
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((price == null) ? 0 : price.hashCode());
-        result = prime * result + ((description == null) ? 0 : description.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((category == null) ? 0 : category.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Product other = (Product) obj;
-        if (price == null) {
-            if (other.price != null)
-                return false;
-        } else if (!price.equals(other.price))
-            return false;
-        if (description == null) {
-            if (other.description != null)
-                return false;
-        } else if (!description.equals(other.description))
-            return false;
-        if (name == null) {
-            if (other.name != null)
-                return false;
-        } else if (!name.equals(other.name))
-            return false;
-        if (category == null) {
-            if (other.category != null)
-                return false;
-        } else if (!category.equals(other.category))
-            return false;
-        return true;
-    }
+   
     
     
 }

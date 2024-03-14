@@ -29,8 +29,8 @@ public class LoginResponse {
         this.authToken = authToken;
         this.username = user.getUsername();
         this.email = user.getEmail();
-        this.firstName = user.getFirst_name();
-        this.lastName = user.getLast_name();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
         this.roles = user.getRoles().stream().map(Role::getName).collect(Collectors.toSet());
 
     }
