@@ -31,3 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+### DS Store ###
+**/.DS_Store
+
+### Target Class Files ###
+**/Target
